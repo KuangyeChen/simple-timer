@@ -1,0 +1,5 @@
+.python-version
+.eggs
+build
+dist
+.DS_Store
