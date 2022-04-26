@@ -9,6 +9,8 @@ MINS_UNIT = ["MINS", "MIN", "M"]
 SECONDS_UNIT = ["SECONDS", "SECOND", "S"]
 APP_NAME = "SimpleTimer"
 ICON_FILE = "icon.png"
+PAUSE_TITLE = "Pause"
+RESUME_TITLE = "Resume"
 
 
 class TimerApp(object):
@@ -19,6 +21,10 @@ class TimerApp(object):
         self.app = rumps.App(APP_NAME, title=title,
                              icon=ICON_FILE, quit_button="Stop")
         self.timer = rumps.Timer(self.on_tick, 1)
+
+        self.pause_resume_button = rumps.MenuItem(
+            title=PAUSE_TITLE, callback=self.pause_and_resume)
+        self.app.menu = [self.pause_resume_button]
 
     def on_tick(self, sender):
         time_left = self.timer_seconds - self.count
@@ -37,6 +43,14 @@ class TimerApp(object):
         else:
             self.app.title = "{}{:2d}:{:02d}".format(title_str, mins, secs)
         self.count += 1
+
+    def pause_and_resume(self, sender):
+        if sender.title == PAUSE_TITLE:
+            self.timer.stop()
+            sender.title = RESUME_TITLE
+        else:
+            self.timer.start()
+            sender.title = PAUSE_TITLE
 
     def stop(self):
         self.timer.stop()
